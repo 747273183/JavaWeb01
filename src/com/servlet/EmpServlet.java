@@ -5,7 +5,7 @@ import com.dao.EmpDao;
 import com.google.gson.Gson;
 import com.pojo.Dept;
 import com.pojo.Emp;
-import com.sun.deploy.util.StringUtils;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +18,8 @@ import java.util.List;
 
 
 public class EmpServlet extends HttpServlet {
+
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             doPost(request,response);
@@ -54,6 +56,7 @@ public class EmpServlet extends HttpServlet {
             //把数据转换成json字符串
             Gson gson=new Gson();
             String json = gson.toJson(depts);
+
             out.println(json);
             out.flush();
             out.close();
@@ -65,13 +68,23 @@ public class EmpServlet extends HttpServlet {
             String esex = request.getParameter("esex");
             String eage = request.getParameter("eage");
             String[] ehobbies = request.getParameterValues("ehobby");
-            String ehobby = StringUtils.join(Arrays.asList(ehobbies), ",");
+
+            String ehobby="";
+            if (ehobbies.length>0)
+            {
+                 ehobby = toStringByComma(ehobbies);
+            }
+
+
             String did = request.getParameter("did");
 
             Dept dept=deptDao.getOne(Integer.parseInt(did));
             Emp emp=new Emp(null,ename,esex,Integer.parseInt(eage),ehobby,dept);
 
+
+
             empDao.add(emp);
+            request.getRequestDispatcher("/EmpServlet?method=list").forward(request,response);
         }
         else if ("update".equals(method))
         {
@@ -80,19 +93,27 @@ public class EmpServlet extends HttpServlet {
             String esex = request.getParameter("esex");
             String eage = request.getParameter("eage");
             String[] ehobbies = request.getParameterValues("ehobby");
-            String ehobby = StringUtils.join(Arrays.asList(ehobbies), ",");
+            String ehobby = toStringByComma(ehobbies);
             String did = request.getParameter("did");
 
             Dept dept=deptDao.getOne(Integer.parseInt(did));
             Emp emp=new Emp(Integer.parseInt(eid),ename,esex,Integer.parseInt(eage),ehobby,dept);
 
             empDao.update(emp);
+            request.getRequestDispatcher("/EmpServlet?method=list").forward(request,response);
         }
         else if ("delete".equals(method))
         {
             String eid = request.getParameter("eid");
             empDao.delete(Integer.parseInt(eid));
+            request.getRequestDispatcher("/EmpServlet?method=list").forward(request,response);
         }
+    }
+
+    private String toStringByComma(String[] ehobbies) {
+        return Arrays.asList(ehobbies).toString()
+                .replace("[","")
+                .replace("]","");
     }
 
 

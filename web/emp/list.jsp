@@ -53,10 +53,10 @@
         <td>${emp.ehobby}</td>
         <td>${emp.dept.dname}</td>
         <td>
-          <a href="EmpServlet?method=getOne&did=${emp.eid}">修改</a>
+          <a href="EmpServlet?method=getOne&eid=${emp.eid}">修改</a>
         </td>
         <td>
-          <a href="EmpServlet?method=delete&did=${emp.eid}">删除</a>
+          <a href="EmpServlet?method=delete&eid=${emp.eid}">删除</a>
         </td>
       </tr>
     </c:forEach>

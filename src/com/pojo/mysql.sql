@@ -34,3 +34,4 @@ insert into emp values(null,'孙二娘','女',18,'做饭,跳舞',2);
 insert into emp values(null,'王小二','男',23,'喝酒,杀人',3);
 
 select * from emp;
+

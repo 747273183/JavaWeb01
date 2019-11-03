@@ -25,12 +25,10 @@
             margin-bottom: 10px;
         }
     </style>
-    <script src="/JavaWeb01/js/jquery-3.3.1.js"></script>
+    <script src="../js/jquery-3.3.1.js"></script>
     <script type="text/javascript">
         $(function () {
-            $.post("EmpServlet?method=jsonList", function(data) {
-
-                console.log(data)
+            $.post("/JavaWeb01/EmpServlet?method=jsonList", function(data) {
                 for ( var i = 0; i < data.length; i++) {
                     var did = data[i].did;
                     var dname = data[i].dname;
@@ -76,9 +74,7 @@
             <td>所属部门</td>
             <td>
                 <select name="did">
-                <c:forEach items="${depts}" var="dept">
-                    <option value="${dept.did}">${dept.dname}</option>
-                </c:forEach>
+
                 </select>
             </td>
         </tr>

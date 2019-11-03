@@ -40,13 +40,15 @@ public class EmpDao extends BaseDao{
         try {
            pstm = conn.prepareStatement("select * from emp where eid=?");
            pstm.setInt(1,eid);
-           while (rs!=null && rs.next())
+            rs = pstm.executeQuery();
+            while (rs!=null && rs.next())
            {
                String ename = rs.getString(2);
                String esex = rs.getString(3);
                int eage=rs.getInt(4);
                String ehobby = rs.getString(5);
                int did=rs.getInt(6);
+
                emp.setEid(eid);
                emp.setEname(ename);
                emp.setEsex(esex);
@@ -88,8 +90,12 @@ public class EmpDao extends BaseDao{
     {
         conn = getConn();
         try {
-            pstm = conn.prepareStatement("insert into emp values(null,?)");
+            pstm = conn.prepareStatement("insert into emp values(null,?,?,?,?,?)");
             pstm.setString(1,emp.getEname());
+            pstm.setString(2,emp.getEsex());
+            pstm.setInt(3,emp.getEage());
+            pstm.setString(4,emp.getEhobby());
+            pstm.setInt(5,emp.getDept().getDid());
             pstm.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,7 +110,7 @@ public class EmpDao extends BaseDao{
         List<Emp> emps=new ArrayList<>();
         conn = getConn();
         try {
-            pstm = conn.prepareStatement("select * from emp");
+            pstm = conn.prepareStatement("select eid,ename,esex,eage,ehobby,d.did,d.dname from emp e,dept d where e.did=d.did");
             rs = pstm.executeQuery();
             while (rs!=null && rs.next())
             {
@@ -114,10 +120,11 @@ public class EmpDao extends BaseDao{
                 int eage=rs.getInt(4);
                 String ehobby = rs.getString(5);
                 int did=rs.getInt(6);
+                String dname=rs.getString(7);
 
 
-                DeptDao deptDao=new DeptDao();
-                Dept dept = deptDao.getOne(did);
+
+                Dept dept =new Dept(did,dname);
 
                 Emp emp =new Emp(eid,ename,esex,eage,ehobby,dept);
                 emps.add(emp);

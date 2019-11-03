@@ -29,11 +29,22 @@
     <script src="js/jquery-3.3.1.js"></script>
     <script type="text/javascript">
         $(function () {
-            $.post("EmpServlet?method=jsonList", function(data){
-                alert("Data Loaded: " + data);
-            });
+            $.post("/JavaWeb01/EmpServlet?method=jsonList", function(data) {
+                for ( var i = 0; i < data.length; i++) {
+                    var did = data[i].did;
+                    var dname = data[i].dname;
+                    var selectedDid=${emp.dept.did}
+                    if(selectedDid==did)
+                    {
+                        $("select").append("<option value='"+did+"' selected='selected'>"+dname+"</option>");
+                    }
+                    else
+                    {
+                        $("select").append("<option value='"+did+"'>"+dname+"</option>");
+                    }
+                }
+            }, "json");
         });
-
     </script>
 </head>
 <body>
@@ -69,7 +80,7 @@
         <tr>
             <td>年龄</td>
             <td>
-                <input type="text" name="eage"  />
+                <input type="text" name="eage" value="${emp.eage}"  />
             </td>
         </tr>
         <tr>
@@ -103,9 +114,7 @@
             <td>所属部门</td>
             <td>
                 <select name="did">
-                    <c:forEach items="${depts}" var="dept">
-                        <option value="${dept.did}">${dept.dname}</option>
-                    </c:forEach>
+
                 </select>
             </td>
         </tr>
